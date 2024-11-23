@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { constants, Contract, RpcProvider } from "starknet";
 import { connect, disconnect } from "tokenbound-connectkit";
 import { CounterABi } from "./utils/abi";
+
 const contractAddress = "0x18ba8fe6834e089c09d62b3ff41e94f549a9797a7b93a1fb112ca9fbaf3959d";
+
 const provider = new RpcProvider({
   nodeUrl: "https://starknet-mainnet.public.blastapi.io/rpc/v0_7",
 });
@@ -22,6 +24,8 @@ export default function Page() {
           chainId: constants.NetworkName.SN_MAIN,
         },
       });
+
+      console.log(wallet, 'connected wallet')
 
       setConnection(wallet);
       setAccount(wallet?.account);
