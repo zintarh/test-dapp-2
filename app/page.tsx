@@ -17,17 +17,33 @@ export default function Page() {
   const [count, setCount] = useState<number>(0);
   const counterContract = new Contract(CounterABi, contractAddress, provider);
 
+
+   const ETH_CONTRACT =
+    "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"
+
   const connectFn = async () => {
     try {
+
       const { wallet } = await connect({
         tokenboundOptions: {
           chainId: constants.NetworkName.SN_MAIN,
+          policies: [
+            {
+              target: ETH_CONTRACT,
+              method: "approve",
+              description:
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            },
+          ],
         },
       });
+
+
 
       console.log(wallet, 'connected wallet')
 
       setConnection(wallet);
+
       setAccount(wallet?.account);
       setAddress(wallet?.selectedAddress);
     } catch (e) {
@@ -51,7 +67,7 @@ export default function Page() {
     getCounter();
   }, []);
 
- 
+
 
   const setCounter = async () => {
     const call = counterContract.populate("increase_balance", [1]);
@@ -61,19 +77,19 @@ export default function Page() {
     setCount(parseInt(newCount.toString()));
   };
 
- 
+
   useEffect(() => {
     if (account) {
       counterContract.connect(account);
     }
-  
+
   }, [account])
 
   return (
     <div className="flex flex-col items-center justify-center h-[100vh] ">
       <div className="my-10">
-      <p className="text-[30px] text-center font-bold"> Example dApp</p>
-      <p className="py-1 text-center text-[#F1F0E8] font-normal">Connect with tokenbound and increament count by <span className="text-[20px] font-bold">1</span></p>
+        <p className="text-[30px] text-center font-bold"> Example dApp</p>
+        <p className="py-1 text-center text-[#F1F0E8] font-normal">Connect with tokenbound and increament count by <span className="text-[20px] font-bold">1</span></p>
       </div>
       {!connection ? (
         <div>
