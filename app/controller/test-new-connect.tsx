@@ -11,7 +11,7 @@ const contractAddress =
   "0x18ba8fe6834e089c09d62b3ff41e94f549a9797a7b93a1fb112ca9fbaf3959d";
 
 const provider = new RpcProvider({
-  nodeUrl: "https://starknet-mainnet.public.blastapi.io/rpc/v0_7",
+  nodeUrl: `https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_7/4PHlmV2x26oj0up8xY3ZuqjhHb7mSvfQ`,
 });
 
 export default function Page2() {
@@ -20,7 +20,9 @@ export default function Page2() {
   const [account, setAccount] = useState<any>();
   const [count, setCount] = useState<number>(0);
   const counterContract = new Contract(CounterABi, contractAddress, provider);
+
   const controller = new Controller({
+    policies: [],
     rpc: "https://api.cartridge.gg/x/starknet/mainnet",
   });
 
@@ -28,7 +30,7 @@ export default function Page2() {
     useState<AccountInterface | null>(null);
 
   async function connectCatridge() {
-    await controller.probe()
+    await controller.probe();
     try {
       const res = await controller.connect();
       if (res) {
@@ -40,8 +42,6 @@ export default function Page2() {
       console.error("Failed to connect:", error);
     }
   }
-
-
 
   const connectFn = async () => {
     try {
@@ -85,6 +85,16 @@ export default function Page2() {
   }, []);
 
 
+  useEffect(() => {
+    const autoconnect = async () => {
+      if(await controller.probe()){
+        connectCatridge()
+      }
+    };
+    autoconnect();
+  }, []);
+
+
   const setCounter = async () => {
     const call = counterContract.populate("increase_balance", [1]);
     const res = await counterContract.increase_balance(call.calldata);
@@ -111,14 +121,21 @@ export default function Page2() {
       </div>
 
       <div className="py-4">
-        <button
-          className="button text-center cursor-pointer px-5 mt-10 py-4 text-[#F1F0E8] bg-[#0C0C4F]"
-          onClick={catridgeAccount ? connectCatridge : disconnectFnCatridge}
-        >
-          {catridgeAccount
-            ? "disconnect"
-            : "  Connect with catridge controller"}
-        </button>
+        {!catridgeAccount ? (
+          <button
+            className="button text-center cursor-pointer px-5 mt-10 py-4 text-[#F1F0E8] bg-[#0C0C4F]"
+            onClick={connectCatridge}
+          >
+            Connect with catridge controller
+          </button>
+        ) : (
+          <button
+            className="button text-center cursor-pointer px-5 mt-10 py-4 text-[#F1F0E8] bg-[#0C0C4F]"
+            onClick={disconnectFnCatridge}
+          >
+            disconnect
+          </button>
+        )}
       </div>
 
       {catridgeAccount && !connection ? (
