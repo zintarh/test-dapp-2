@@ -11,7 +11,7 @@
   "dependencies": {
     "@cartridge/controller": "^0.3.46",
     "@emotion/react": "^11.11.1",
-    "anonymous-test": "^0.0.4",
+    "anonymous-test": "^0.0.5",
     "cra-template-typescript": "1.2.0",
     "get-starknet": "^3.0.1",
     "get-starknet-core": "^3.2.0",

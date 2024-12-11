@@ -49,6 +49,7 @@ export default function Page2() {
         tokenboundOptions: {
           chainId: constants.NetworkName.SN_MAIN,
           account: catridgeAccount,
+          tbaAddress: "0x45fa98a059dd89fd17db02530814969b870a9ae695ce87ad5668500226c741f"
         },
       });
 
