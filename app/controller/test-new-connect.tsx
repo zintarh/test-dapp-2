@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { AccountInterface, constants, Contract, RpcProvider } from "starknet";
-import {connect, disconnect} from "anonymous-test"
+import { connect, disconnect } from "anonymous-test";
 // import { connect, disconnect } from "tokenbound-connectkit-test";
 
 import { CounterABi } from "../utils/abi";
@@ -13,8 +13,6 @@ const contractAddress =
 const provider = new RpcProvider({
   nodeUrl: "https://starknet-mainnet.public.blastapi.io/rpc/v0_7",
 });
-
-
 
 export default function Page2() {
   const [connection, setConnection] = useState<any>(null);
@@ -30,11 +28,12 @@ export default function Page2() {
     useState<AccountInterface | null>(null);
 
   async function connectCatridge() {
+    await controller.probe()
     try {
       const res = await controller.connect();
       if (res) {
         setAccount(res);
-        setCatridgeAccount(res)
+        setCatridgeAccount(res);
         console.log(res, "res");
       }
     } catch (error) {
@@ -42,14 +41,10 @@ export default function Page2() {
     }
   }
 
-  //   function disconnect() {
-  //     controller.disconnect();
-  //     setAccount(null);
-  //   }
+
 
   const connectFn = async () => {
     try {
-
       const { wallet } = await connect({
         tokenboundOptions: {
           chainId: constants.NetworkName.SN_MAIN,
@@ -76,6 +71,11 @@ export default function Page2() {
     setConnection(null);
   };
 
+  const disconnectFnCatridge = async () => {
+    await controller.disconnect();
+    setCatridgeAccount(null);
+  };
+
   useEffect(() => {
     const getCounter = async () => {
       const counter = await counterContract.get_balance();
@@ -84,15 +84,6 @@ export default function Page2() {
     getCounter();
   }, []);
 
-  useEffect(() => {
-    const autoconnect = async () => {
-      await controller.probe();
-      if (await controller.probe()) {
-        connectCatridge();
-      }
-    };
-    autoconnect();
-  }, []);
 
   const setCounter = async () => {
     const call = counterContract.populate("increase_balance", [1]);
@@ -119,12 +110,17 @@ export default function Page2() {
         </p>
       </div>
 
-      <button
-        className="button text-center cursor-pointer px-5 mt-10 py-4 text-[#F1F0E8] bg-[#0C0C4F]"
-        onClick={connectCatridge}
-      >
-        Connect with catridge controller
-      </button>
+      <div className="py-4">
+        <button
+          className="button text-center cursor-pointer px-5 mt-10 py-4 text-[#F1F0E8] bg-[#0C0C4F]"
+          onClick={catridgeAccount ? connectCatridge : disconnectFnCatridge}
+        >
+          {catridgeAccount
+            ? "disconnect"
+            : "  Connect with catridge controller"}
+        </button>
+      </div>
+
       {catridgeAccount && !connection ? (
         <div>
           <button
