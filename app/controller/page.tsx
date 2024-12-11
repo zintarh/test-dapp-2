@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { AccountInterface } from "starknet";
 import Controller from "@cartridge/controller";
 import Page2 from "./test-new-connect";
