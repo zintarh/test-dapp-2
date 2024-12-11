@@ -34,6 +34,7 @@ export default function Page2() {
       const res = await controller.connect();
       if (res) {
         setAccount(res);
+        setCatridgeAccount(res)
         console.log(res, "res");
       }
     } catch (error) {
