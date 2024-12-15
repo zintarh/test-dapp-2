@@ -8,11 +8,12 @@ const ETH_CONTRACT =
   "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
 
 const controller = new Controller({
-  rpc: "https://api.cartridge.gg/x/starknet/mainnet",
+  // rpc: "https://api.cartridge.gg/x/starknet/mainnet",
 });
 
 export default function Main() {
   const [account, setAccount] = useState<AccountInterface | null>(null);
+
   async function connect() {
     try {
       const res = await controller.connect();
@@ -23,6 +24,8 @@ export default function Main() {
       console.error("Failed to connect:", error);
     }
   }
+
+  console.log(account, "account")
 
   function disconnect() {
     controller.disconnect();
@@ -43,16 +46,16 @@ export default function Main() {
 
   return (
     <div className="flex items-center flex-col justify-center h-[400px]">
-      {/* {!account ? (
+      {!account ? (
         <button onClick={connect}>Connect</button>
       ) : (
         <>
           <button onClick={onIncrement}>Increment Counter</button>
           <button onClick={disconnect}>Disconnect</button>
         </>
-      )} */}
+      )}
 
-      <Page2 />
+      {/* <Page2 /> */}
     </div>
   );
 }
